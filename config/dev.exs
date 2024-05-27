@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :phxdev, Phxdev.Repo,
-  username: "backend_stuff",
-  password: "Abcd1234",
+  username: "postgres",
+  password: "postgres",
   hostname: "localhost",
   database: "phxdev_dev",
   stacktrace: true,
