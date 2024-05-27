@@ -1,0 +1,28 @@
+<.header>
+  Taskmgr <%= @taskmgr.id %>
+  <:subtitle>This is a taskmgr record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/taskmgrs/#{@taskmgr}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit taskmgr</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Username"><%= @taskmgr.username %></:item>
+  <:item title="Title"><%= @taskmgr.title %></:item>
+  <:item title="Description"><%= @taskmgr.description %></:item>
+</.list>
+
+<.back navigate={~p"/taskmgrs"}>Back to taskmgrs</.back>
+
+<.modal :if={@live_action == :edit} id="taskmgr-modal" show on_cancel={JS.patch(~p"/taskmgrs/#{@taskmgr}")}>
+  <.live_component
+    module={PhxdevWeb.TaskmgrLive.FormComponent}
+    id={@taskmgr.id}
+    title={@page_title}
+    action={@live_action}
+    taskmgr={@taskmgr}
+    patch={~p"/taskmgrs/#{@taskmgr}"}
+  />
+</.modal>

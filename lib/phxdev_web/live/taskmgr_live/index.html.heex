@@ -1,0 +1,43 @@
+<.header>
+  Listing Taskmgrs
+  <:actions>
+    <.link patch={~p"/taskmgrs/new"}>
+      <.button>New Taskmgr</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="taskmgrs"
+  rows={@streams.taskmgrs}
+  row_click={fn {_id, taskmgr} -> JS.navigate(~p"/taskmgrs/#{taskmgr}") end}
+>
+  <:col :let={{_id, taskmgr}} label="Username"><%= taskmgr.username %></:col>
+  <:col :let={{_id, taskmgr}} label="Title"><%= taskmgr.title %></:col>
+  <:col :let={{_id, taskmgr}} label="Description"><%= taskmgr.description %></:col>
+  <:action :let={{_id, taskmgr}}>
+    <div class="sr-only">
+      <.link navigate={~p"/taskmgrs/#{taskmgr}"}>Show</.link>
+    </div>
+    <.link patch={~p"/taskmgrs/#{taskmgr}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, taskmgr}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: taskmgr.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="taskmgr-modal" show on_cancel={JS.patch(~p"/taskmgrs")}>
+  <.live_component
+    module={PhxdevWeb.TaskmgrLive.FormComponent}
+    id={@taskmgr.id || :new}
+    title={@page_title}
+    action={@live_action}
+    taskmgr={@taskmgr}
+    patch={~p"/taskmgrs"}
+  />
+</.modal>
